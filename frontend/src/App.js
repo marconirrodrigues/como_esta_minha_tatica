@@ -1,11 +1,10 @@
 import React from 'react';
-import TaticaForm from './components/TaticForm';
+import TaticForm from './components/TaticForm';
 
 function App() {
   return (
     <div className="App">
-      <h1>Avaliação de Táticas - Football Manager</h1>
-      <TaticaForm />
+      <TaticForm />
     </div>
   );
 }

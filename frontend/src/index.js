@@ -1,11 +1,8 @@
-// frontend/src/index.js
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import './index.css';   // Pode ser um arquivo de estilos básico
 import App from './App';
 
-// Renderiza o componente App dentro do div com id 'root'
 ReactDOM.render(
   <React.StrictMode>
     <App />

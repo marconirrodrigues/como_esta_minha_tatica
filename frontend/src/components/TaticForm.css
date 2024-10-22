@@ -1,0 +1,35 @@
+.container-campo {
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: flex-start; /* Mantém o campo no topo */
+  height: 50vh; /* Altura da tela inteira */
+  padding-top: 20px; /* Espaço no topo */
+}
+
+.campo {
+  width: 100%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 0;
+  padding-bottom: 56.25%; /* Proporção 16:9 */
+  border: none; /* Sem contornos */
+}
+
+
+.linha-defesa, .linha-meio, .linha-ataque {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px 0;
+}
+
+.jogador {
+  width: 40px;
+  height: 40px;
+  background-color: blue;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 40px;
+  color: white;
+  font-weight: bold;
+}

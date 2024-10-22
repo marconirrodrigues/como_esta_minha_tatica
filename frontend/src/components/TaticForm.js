@@ -1,66 +1,51 @@
 import React, { useState } from 'react';
+import axios from 'axios';  // Para fazer requisições ao backend
 
 const TaticaForm = () => {
-    const [formacao, setFormacao] = useState('');
-    const [resultado, setResultado] = useState(null);
-    const [error, setError] = useState(null);
+  const [file, setFile] = useState(null);
+  const [resultados, setResultados] = useState(null);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
-        try {
-            const response = await fetch('http://localhost:3000/taticas', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ formacao }),
-            });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-            if (!response.ok) {
-                throw new Error('Erro na requisição');
-            }
+    const formData = new FormData();
+    formData.append('file', file);
 
-            const data = await response.json();
-            setResultado(data);  // Atualiza o estado com a resposta da API
-            setError(null);  // Remove qualquer erro anterior, se houver
+    try {
+      const response = await axios.post('http://localhost:3000/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setResultados(response.data);
+    } catch (error) {
+      console.error('Erro ao enviar o arquivo:', error);
+    }
+  };
 
-        } catch (err) {
-            console.error('Erro ao enviar a tática:', err);
-            setError('Erro ao conectar com o backend');
-        }
-    };
-
-    return (
+  return (
+    <div>
+      <h2>Carregue seu arquivo</h2>
+      <form onSubmit={handleSubmit}>
+        <input type="file" onChange={handleFileChange} accept=".html" />
+        <button type="submit">Enviar</button>
+      </form>
+      {resultados && (
         <div>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Formação Tática:
-                    <input 
-                        type="text" 
-                        value={formacao} 
-                        onChange={(e) => setFormacao(e.target.value)} 
-                    />
-                </label>
-                <button type="submit">Enviar</button>
-            </form>
-
-            {resultado && (
-                <div>
-                    <h3>Análise da Tática</h3>
-                    <p><strong>Formação:</strong> {resultado.formacao}</p>
-                    <p><strong>Pontos Fortes:</strong> {resultado.pontosFortes.join(', ')}</p>
-                    <p><strong>Fraquezas:</strong> {resultado.fraquezas.join(', ')}</p>
-                </div>
-            )}
-
-            {error && (
-                <div style={{ color: 'red' }}>
-                    <p>{error}</p>
-                </div>
-            )}
+          <h3>Sugestão de Táticas:</h3>
+          <p>Formação Sugerida: {resultados.formacaoSugerida}</p>
+          <h4>Jogadores em Destaque:</h4>
+          <ul>
+            {resultados.jogadoresDestaque.map((jogador, index) => (
+              <li key={index}>{jogador.nome} - Posição: {jogador.posicao}</li>
+            ))}
+          </ul>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default TaticaForm;
